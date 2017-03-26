@@ -30,6 +30,7 @@ if [ -z "$ONLY_EDGE"]; then
 
 fi
 
+cd "$1"
 
 sudo apt-get install qemu qemu-user-static -y
 
