@@ -1,0 +1,14 @@
+#!/bin/sh
+
+VERSION="${VERSION:-latest}"
+
+ARCH="${ARCH:-$(uname -m)}"
+if [ ${ARCH} = "x86_64" ] ; then
+    ARCH=amd64
+fi
+
+UID="${USERID:-$(id -u)}"
+
+docker run -u ${UID} -t -i -e LC_ALL=en_US.UTF-8 --rm -v $(pwd):/build \
+    --privileged=true \
+    snapcraft/xenial-${ARCH}:${VERSION} $@

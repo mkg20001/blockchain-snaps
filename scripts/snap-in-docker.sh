@@ -6,6 +6,8 @@
 #   project: The name of the project. It must be a directory relative to the
 #            root of the repo.
 
+snapcraft="$(pwd)/scripts/snapcraft-docker"
+
 set -ev
 
 if [ -z "$ONLY_EDGE"]; then
@@ -28,4 +30,13 @@ if [ -z "$ONLY_EDGE"]; then
 
 fi
 
-docker run -e LC_ALL=en_US.UTF-8 -v "$(pwd)":/cwd snapcore/snapcraft sh -c "apt update && apt upgrade -y && locale-gen en_US.UTF-8 && cd /cwd && ./scripts/snap.sh $1"
+
+sudo apt-get install qemu qemu-user-static -y
+
+set +v
+set -x
+
+for arch in armhf arm64 amd64; do
+  ARCH=$arch $snapcraft clean
+  ARCH=$arch $snapcraft
+done
